@@ -1,8 +1,10 @@
-import React from "react";
+import React, { ChangeEventHandler, ReactNode, useRef } from "react";
 import styled from "styled-components";
 import Bitcoin from "../assets/Bitcoin.png";
 import SearchIcon from "@mui/icons-material/Search";
-type Props = {};
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { coinsActions } from "../store/coins";
 
 const Container = styled.div`
   height: 50px;
@@ -56,10 +58,14 @@ const Text = styled.span`
   font-weight: bold;
   cursor: pointer;
   margin-left: 1.5rem;
-  color: #4a4a4a;
+  color: ${(props) => props.theme.colorText};
   &:hover {
     color: black;
   }
+`;
+const LinkDecorate = styled(Link)`
+  text-decoration: none;
+  color: ${(props) => props.theme.colorText};
 `;
 
 const ImgBc = styled.img`
@@ -67,19 +73,27 @@ const ImgBc = styled.img`
   height: 50px;
 `;
 
-const NavBar = (props: Props) => {
+const NavBar = () => {
+  const dispatch = useDispatch();
+  const filterInput = useRef<HTMLInputElement>(null);
+  const filterHandler = () => {
+    dispatch(coinsActions.setFilter(filterInput.current!.value));
+  };
+
   return (
     <Container>
       <Wrapper>
         <Left>
           <ImgBc src={Bitcoin} />
-          <Text>Home</Text>
+          <LinkDecorate to="/home">
+            <Text>Home</Text>
+          </LinkDecorate>
           <Text>Coins</Text>
           <Text>News</Text>
         </Left>
         <Center>
           <SearchContainer>
-            <Input placeholder="Search" />
+            <Input placeholder="Search" ref={filterInput} onChange={filterHandler} />
             <SearchIcon style={{ color: "gray", fontSize: 16 }} />
           </SearchContainer>
         </Center>

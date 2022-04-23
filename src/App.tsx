@@ -1,18 +1,20 @@
-import React from "react";
 import "./App.css";
-import { useGetCoinsQuery } from "./services/coinApi";
-import NavBar from "./components/NavBar";
-import Coins from "./components/Coins";
+import Home from "./pages/Home";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
+import { main } from "./Theme";
+import { useDispatch } from "react-redux";
+import { coinsActions } from "./store/coins";
 
 function App() {
-  const { data: coinList, isFetching, isSuccess, isError } = useGetCoinsQuery(1);
-  console.log(coinList?.data);
-
   return (
-    <>
-      <NavBar />
-      <Coins />
-    </>
+    <ThemeProvider theme={main}>
+      <Routes>
+        <Route path="/*" element={<Navigate replace to="/home"></Navigate>}></Route>
+        <Route path="/home/" element={<Home />}></Route>
+        <Route path="/coin/:coinName/" element={<p>Hola</p>}></Route>
+      </Routes>
+    </ThemeProvider>
   );
 }
 
