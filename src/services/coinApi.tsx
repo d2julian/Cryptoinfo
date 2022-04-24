@@ -5,8 +5,6 @@ type Headers = {
   "x-rapidapi-key": string;
 };
 
-type Result = {};
-
 interface coinHistory {
   uuid: string;
   timePeriod: string;
@@ -28,10 +26,10 @@ export const coinApi = createApi({
     getCoins: builder.query({
       query: (count: number) => (count ? createRequest(`/coins?limit=${count}`) : createRequest("/coins")),
     }),
-    getCoin: builder.query<Result, string>({
+    getCoin: builder.query({
       query: (uuid: string) => createRequest(`/coin/${uuid}?timePeriod=24h`),
     }),
-    getCoinHistory: builder.query<Result, coinHistory>({
+    getCoinHistory: builder.query({
       query: ({ uuid, timePeriod }: coinHistory) => createRequest(`/coin/${uuid}/history?timePeriod=${timePeriod}`),
     }),
   }),

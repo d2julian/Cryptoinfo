@@ -22,6 +22,9 @@ const Tr = styled.tr`
   &:hover {
     background-color: rgba(249, 250, 251);
   }
+  &:nth-child(even) {
+    background-color: rgba(231, 231, 231);
+  }
 `;
 
 const Td = styled.td`
@@ -62,8 +65,8 @@ const CoinItem = ({ coin }: CoinProps) => {
       <Td>
         <CoinWrapper>
           <ImgCoin src={coin.iconUrl} />
-          <LinkDecorate to={`/coin/${coin.name}`}>
-            <CoinTitle>{coin.name}</CoinTitle>{" "}
+          <LinkDecorate to={{ pathname: `/coin/${coin.name}` }} state={{ id: coin.uuid }}>
+            <CoinTitle>{coin.name}</CoinTitle>
           </LinkDecorate>
         </CoinWrapper>
       </Td>

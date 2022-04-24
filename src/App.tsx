@@ -3,8 +3,7 @@ import Home from "./pages/Home";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { main } from "./Theme";
-import { useDispatch } from "react-redux";
-import { coinsActions } from "./store/coins";
+import CoinDetail from "./pages/CoinDetail";
 
 function App() {
   return (
@@ -12,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/*" element={<Navigate replace to="/home"></Navigate>}></Route>
         <Route path="/home/" element={<Home />}></Route>
-        <Route path="/coin/:coinName/" element={<p>Hola</p>}></Route>
+        <Route path="/coin/:coinName/" element={<CoinDetail />}></Route>
       </Routes>
     </ThemeProvider>
   );
