@@ -1,7 +1,9 @@
 import React from "react";
-import { useGetCoinQuery } from "../services/coinApi";
+import { useGetCoinQuery, useGetCoinHistoryQuery } from "../services/coinApi";
 import styled from "styled-components";
 import millify from "millify";
+import LineChart from "./LineChart";
+import { Stats } from "fs";
 
 type CoinIdProp = {
   id: string;
@@ -11,10 +13,10 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   padding: 20px 15%;
-  /* width: 1300px;
+  width: 1300px;
   padding-right: 15px;
   padding-left: 15px;
-  margin: auto; */
+  margin: auto;
 `;
 
 const Left = styled.div`
@@ -40,8 +42,9 @@ const Stat = styled.div`
 const Label = styled.label`
   font-weight: 400;
   font-size: 14px;
-  margin-right: 5px;
+  margin-right: 10px;
   color: ${(props) => props.theme.colorText};
+  flex: 1;
 `;
 const Value = styled.label`
   font-weight: 400;
@@ -96,7 +99,7 @@ const Change = styled.label`
 const StatWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  width: 20%;
+  width: 30%;
 `;
 
 const Url = styled.a`
@@ -107,60 +110,84 @@ const Url = styled.a`
   color: ${(props) => props.theme.colorText};
   border-radius: 5px;
   padding: 0 15px;
+  flex: 1;
+`;
+
+const RightMarket = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(243, 244, 246, 1);
+  border-radius: 12px;
 `;
 
 const Coin = ({ id }: CoinIdProp) => {
   const { data, isFetching, isSuccess, isError } = useGetCoinQuery(id);
+  const {
+    data: coinHistory,
+    isFetching: isFechingHistory,
+    isSuccess: isSuccessHistory,
+    isError: isErrorHistory,
+  } = useGetCoinHistoryQuery({ uuid: id, timePeriod: "24h" });
   const coin = data?.data?.coin;
-  console.log(coin);
   return (
-    <Container>
-      <Left>
-        <Stat>
-          <RankWrapper>
-            <RankText>Rank {coin?.rank}</RankText>
-          </RankWrapper>
-        </Stat>
-        <Stat>
-          <CoinWrapper>
-            <ImgCoin src={coin?.iconUrl} />
-            <CoinTitle>
-              {coin?.name}({coin?.symbol})
-            </CoinTitle>
-          </CoinWrapper>
-        </Stat>
-        <Stat>
-          <Title>
-            {coin?.price &&
-              millify(coin?.price, {
-                precision: 3,
-                lowercase: true,
-              })}{" "}
-            USD <Change>{coin?.change}%</Change>
-          </Title>
-        </Stat>
-      </Left>
-      <Right>
-        <Stat>
-          <StatWrapper>
-            <Label>Web</Label>
-            <Url href={coin?.websiteUrl}>{coin?.name}</Url>
-          </StatWrapper>
-        </Stat>
-        <Stat>
-          <StatWrapper>
-            <Label>Web</Label>
-            <Url href={coin?.websiteUrl}>{coin?.name}</Url>
-          </StatWrapper>
-        </Stat>
-        <Stat>
-          <StatWrapper>
-            <Label>Web</Label>
-            <Url href={coin?.websiteUrl}>{coin?.name}</Url>
-          </StatWrapper>
-        </Stat>
-      </Right>
-    </Container>
+    <>
+      <Container>
+        <Left>
+          <Stat>
+            <RankWrapper>
+              <RankText>Rank {coin?.rank}</RankText>
+            </RankWrapper>
+          </Stat>
+          <Stat>
+            <CoinWrapper>
+              <ImgCoin src={coin?.iconUrl} />
+              <CoinTitle>
+                {coin?.name}({coin?.symbol})
+              </CoinTitle>
+            </CoinWrapper>
+          </Stat>
+          <Stat>
+            <Title>
+              {coin?.price &&
+                millify(coin?.price, {
+                  precision: 3,
+                  lowercase: true,
+                })}{" "}
+              USD <Change>{coin?.change}%</Change>
+            </Title>
+          </Stat>
+        </Left>
+        <Right>
+          <Stat>
+            <StatWrapper>
+              <Label>Web</Label>
+              <Url href={coin?.websiteUrl}>{coin?.name}</Url>
+            </StatWrapper>
+          </Stat>
+          <Stat>
+            <StatWrapper>
+              <Label>Ranking</Label>
+              <Url href={coin?.coinrankingUrl}>Ranking</Url>
+            </StatWrapper>
+          </Stat>
+        </Right>
+      </Container>
+      <Container>
+        <Left>
+          <LineChart coinHistory={coinHistory} currentPrice={coin?.price} coinName={coin?.name}></LineChart>
+        </Left>
+        <RightMarket>
+          <Stat>hola</Stat>
+          <Stat>hola</Stat>
+          <Stat>hola</Stat>
+          <Stat>hola</Stat>
+          <Stat>hola</Stat>
+        </RightMarket>
+      </Container>
+    </>
   );
 };
 
