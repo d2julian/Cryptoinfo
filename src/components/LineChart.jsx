@@ -5,7 +5,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const LineChart = ({ coinHistory, currentPrice, coinName }) => {
   const coinPrice = coinHistory?.data.history.map((h) => h.price).reverse();
   const coinTimeStamp = coinHistory?.data.history.map((h) => new Date(h.timestamp).toLocaleTimeString()).reverse();
-  console.log(coinHistory?.data.history);
   const data = {
     labels: coinTimeStamp,
     datasets: [

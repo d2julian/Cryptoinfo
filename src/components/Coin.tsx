@@ -3,7 +3,6 @@ import { useGetCoinQuery, useGetCoinHistoryQuery } from "../services/coinApi";
 import styled from "styled-components";
 import millify from "millify";
 import LineChart from "./LineChart";
-import { Stats } from "fs";
 
 type CoinIdProp = {
   id: string;
@@ -37,24 +36,22 @@ const Right = styled.div`
 const Stat = styled.div`
   margin-top: 10px;
   width: 100%;
+  margin-left: 15px;
 `;
 
-const Label = styled.label`
+const Label = styled.div`
   font-weight: 400;
   font-size: 14px;
   margin-right: 10px;
   color: ${(props) => props.theme.colorText};
   flex: 1;
-`;
-const Value = styled.label`
-  font-weight: 400;
-  font-size: 14px;
-  color: ${(props) => props.theme.colorText};
+  border-bottom: 1px solid #dee2e6;
 `;
 const Title = styled.label`
   font-weight: 800;
   margin-left: 5px;
   font-size: 25px;
+  margin-top: 10px;
 `;
 
 const RankWrapper = styled.div`
@@ -99,18 +96,21 @@ const Change = styled.label`
 const StatWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  width: 30%;
 `;
 
 const Url = styled.a`
   text-decoration: underline;
   font-weight: 400;
   font-size: 14px;
-  background-color: #ccc;
   color: ${(props) => props.theme.colorText};
-  border-radius: 5px;
   padding: 0 15px;
   flex: 1;
+`;
+
+const UrlText = styled.label`
+  background-color: #ccc;
+  border-radius: 5px;
+  padding: 0px 10px;
 `;
 
 const RightMarket = styled.div`
@@ -118,7 +118,6 @@ const RightMarket = styled.div`
   flex-direction: column;
   flex: 1;
   align-items: center;
-  justify-content: center;
   background-color: rgba(243, 244, 246, 1);
   border-radius: 12px;
 `;
@@ -132,6 +131,7 @@ const Coin = ({ id }: CoinIdProp) => {
     isError: isErrorHistory,
   } = useGetCoinHistoryQuery({ uuid: id, timePeriod: "24h" });
   const coin = data?.data?.coin;
+  console.log(coin);
   return (
     <>
       <Container>
@@ -164,13 +164,17 @@ const Coin = ({ id }: CoinIdProp) => {
           <Stat>
             <StatWrapper>
               <Label>Web</Label>
-              <Url href={coin?.websiteUrl}>{coin?.name}</Url>
+              <Url href={coin?.websiteUrl}>
+                <UrlText>{coin?.name}</UrlText>
+              </Url>
             </StatWrapper>
           </Stat>
           <Stat>
             <StatWrapper>
               <Label>Ranking</Label>
-              <Url href={coin?.coinrankingUrl}>Ranking</Url>
+              <Url href={coin?.coinrankingUrl}>
+                <UrlText>Ranking</UrlText>
+              </Url>
             </StatWrapper>
           </Stat>
         </Right>
@@ -180,11 +184,19 @@ const Coin = ({ id }: CoinIdProp) => {
           <LineChart coinHistory={coinHistory} currentPrice={coin?.price} coinName={coin?.name}></LineChart>
         </Left>
         <RightMarket>
-          <Stat>hola</Stat>
-          <Stat>hola</Stat>
-          <Stat>hola</Stat>
-          <Stat>hola</Stat>
-          <Stat>hola</Stat>
+          <Title>Statistics</Title>
+          <Stat>
+            <StatWrapper>
+              <Label>Number of Exchanges</Label>
+              <Label>{coin?.numberOfExchanges}</Label>
+            </StatWrapper>
+          </Stat>
+          <Stat>
+            <StatWrapper>
+              <Label>Number of Markets</Label>
+              <Label>{coin?.numberOfMarkets}</Label>
+            </StatWrapper>
+          </Stat>
         </RightMarket>
       </Container>
     </>

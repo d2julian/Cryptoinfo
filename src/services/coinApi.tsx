@@ -1,18 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-type Headers = {
-  "x-rapidapi-host": string;
-  "x-rapidapi-key": string;
-};
-
 interface coinHistory {
   uuid: string;
   timePeriod: string;
 }
 
-const cryptoApiHeaders: Headers = {
-  "x-rapidapi-host": "coinranking1.p.rapidapi.com",
-  "x-rapidapi-key": "82c99c649emsh2064b4a5bc23b61p154057jsnc6cba450ef58",
+console.log(process.env.REACT_APP_SECRET_NAME);
+
+const cryptoApiHeaders = {
+  "x-rapidapi-host": process.env.REACT_APP_RAPID_HOST,
+  "x-rapidapi-key": process.env.REACT_APP_RAPID_KEY,
 };
 
 const baseUrl = "https://coinranking1.p.rapidapi.com/";
